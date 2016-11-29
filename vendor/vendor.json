@@ -7,6 +7,18 @@
 			"revision": ""
 		},
 		{
+			"checksumSHA1": "Jj17Qgvc3a2e5QdtIKiAuVwleJU=",
+			"path": "github.com/couchbase/gocb/gocbcore",
+			"revision": "3e551163c25782608e2dd4e9d70efec06f86f6d5",
+			"revisionTime": "2016-11-17T09:52:19Z"
+		},
+		{
+			"checksumSHA1": "PE3ApUpxtmJlkiV5H27kFOvo8IE=",
+			"path": "github.com/couchbase/gocb/jsonx",
+			"revision": "3e551163c25782608e2dd4e9d70efec06f86f6d5",
+			"revisionTime": "2016-11-17T09:52:19Z"
+		},
+		{
 			"checksumSHA1": "RDDo6zqKb6Mpa4EOFv0RT8ryXvQ=",
 			"path": "github.com/gin-gonic/gin",
 			"revision": "bb159f9260a262fccbdbd6f37f8575d1e7e6aaa0",
@@ -41,6 +53,12 @@
 			"path": "golang.org/x/net/context",
 			"revision": "4971afdc2f162e82d185353533d3cf16188a9f4e",
 			"revisionTime": "2016-11-15T21:05:04Z"
+		},
+		{
+			"checksumSHA1": "19+Z56JE6Csz+LY7GKOVhrytcMM=",
+			"path": "gopkg.in/couchbase/gocb.v1",
+			"revision": "0bd43f0495403d4d49723a556aabb64a112520d9",
+			"revisionTime": "2016-11-14T20:00:45Z"
 		},
 		{
 			"checksumSHA1": "39V1idWER42Lmcmg2Uy40wMzOlo=",

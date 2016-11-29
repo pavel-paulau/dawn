@@ -4,15 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func init() {
-	gin.SetMode("release")
-}
+var data *dataSource
 
-func getDescriptions(c *gin.Context) {}
+func getDescriptions(c *gin.Context) {
+	descriptions, err := data.getDescriptions()
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+	c.IndentedJSON(200, descriptions)
+}
 
 func getResults(c *gin.Context) {}
 
 func httpEngine() *gin.Engine {
+	data = newDataSource()
+
 	router := gin.Default()
 
 	v1 := router.Group("/api/v1")
