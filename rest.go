@@ -16,9 +16,10 @@ func getDescriptions(c *gin.Context) {
 }
 
 func getResults(c *gin.Context) {
-	description := c.Param("description")
+	description := c.Query("description")
+	title := c.Query("title")
 
-	results, err := data.getResults(description)
+	results, err := data.getResults(description, title)
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
@@ -31,9 +32,12 @@ func httpEngine() *gin.Engine {
 
 	router := gin.Default()
 
+	router.StaticFile("/", "./static/index.html")
+	router.Static("/static", "./static")
+
 	v1 := router.Group("/api/v1")
 	v1.GET("descriptions", getDescriptions)
-	v1.GET("results/:description", getResults)
+	v1.GET("results", getResults)
 
 	return router
 }

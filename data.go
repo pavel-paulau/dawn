@@ -29,16 +29,18 @@ func newDataSource() *dataSource {
 
 type description struct {
 	Description string `json:"description"`
+	Tescription string `json:"test_title"`
 }
 
 func (d *dataSource) getDescriptions() ([]description, error) {
 	var descriptions []description
 
 	query := gocb.NewN1qlQuery(
-		"SELECT DISTINCT(m.description) " +
+		"SELECT DISTINCT m.description, b.test_title " +
 			"FROM perf_daily b " +
 			"UNNEST b.metrics AS m " +
-			"WHERE m.description IS NOT NULL;")
+			"WHERE m.description IS NOT NULL " +
+			"ORDER BY b.test_title DESC;")
 
 	rows, err := d.bucket.ExecuteN1qlQuery(query, []interface{}{})
 	if err != nil {
@@ -57,7 +59,7 @@ type result struct {
 	Value float64 `json:"value"`
 }
 
-func (d *dataSource) getResults(description string) ([]result, error) {
+func (d *dataSource) getResults(description, title string) ([]result, error) {
 	var results []result
 
 	query := gocb.NewN1qlQuery(
@@ -65,8 +67,9 @@ func (d *dataSource) getResults(description string) ([]result, error) {
 			"FROM perf_daily b " +
 			"UNNEST b.metrics AS m " +
 			"WHERE m.description = $1 " +
+			"AND b.test_title = $2" +
 			"ORDER BY b.`build`;")
-	params := []interface{}{description}
+	params := []interface{}{description, title}
 
 	rows, err := d.bucket.ExecuteN1qlQuery(query, params)
 	if err != nil {
