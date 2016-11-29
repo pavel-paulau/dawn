@@ -15,7 +15,16 @@ func getDescriptions(c *gin.Context) {
 	c.IndentedJSON(200, descriptions)
 }
 
-func getResults(c *gin.Context) {}
+func getResults(c *gin.Context) {
+	description := c.Param("description")
+
+	results, err := data.getResults(description)
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+	c.IndentedJSON(200, results)
+}
 
 func httpEngine() *gin.Engine {
 	data = newDataSource()

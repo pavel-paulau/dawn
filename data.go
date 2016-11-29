@@ -34,7 +34,11 @@ type description struct {
 func (d *dataSource) getDescriptions() ([]description, error) {
 	var descriptions []description
 
-	query := gocb.NewN1qlQuery("SELECT DISTINCT(m.description) FROM `perf_daily` b UNNEST b.metrics AS m WHERE m.description IS NOT NULL;")
+	query := gocb.NewN1qlQuery(
+		"SELECT DISTINCT(m.description) " +
+			"FROM perf_daily b " +
+			"UNNEST b.metrics AS m " +
+			"WHERE m.description IS NOT NULL;")
 
 	rows, err := d.bucket.ExecuteN1qlQuery(query, []interface{}{})
 	if err != nil {
@@ -46,4 +50,32 @@ func (d *dataSource) getDescriptions() ([]description, error) {
 		descriptions = append(descriptions, row)
 	}
 	return descriptions, nil
+}
+
+type result struct {
+	Build string  `json:"build"`
+	Value float64 `json:"value"`
+}
+
+func (d *dataSource) getResults(description string) ([]result, error) {
+	var results []result
+
+	query := gocb.NewN1qlQuery(
+		"SELECT b.`build`, m.`value` " +
+			"FROM perf_daily b " +
+			"UNNEST b.metrics AS m " +
+			"WHERE m.description = $1 " +
+			"ORDER BY b.`build`;")
+	params := []interface{}{description}
+
+	rows, err := d.bucket.ExecuteN1qlQuery(query, params)
+	if err != nil {
+		return results, err
+	}
+
+	var row result
+	for rows.Next(&row) {
+		results = append(results, row)
+	}
+	return results, nil
 }
