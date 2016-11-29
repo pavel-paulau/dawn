@@ -22,3 +22,8 @@ _testmain.go
 *.exe
 *.test
 *.prof
+dawn
+
+vendor/github.com
+vendor/golang.org
+vendor/gopkg.in
