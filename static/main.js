@@ -42,6 +42,9 @@ function drawCharts() {
 	var charts = {};
 	var descriptions = [];
 
+	var target = document.getElementById('spinner');
+	var spinner = new Spinner({scale: 2}).spin(target);
+
 	$.get('api/v1/descriptions', function(data) {
 		data.forEach(function(element) {
 			descriptions.push(element);
@@ -79,6 +82,9 @@ function drawCharts() {
 		});
 
 		$.when.apply($, xhrs).done(function(){
+			spinner.stop();
+			$("#spinner" ).remove();
+
 			$.each(allCharts, function(i, chart) {
 				chartOptions.title = chart.title;
 
