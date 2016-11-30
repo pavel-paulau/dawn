@@ -48,33 +48,47 @@ function drawCharts() {
 		});
 	})
 	.done(function() {
+		var allCharts = [];
+
+		var xhrs = [];
 		$.each(descriptions, function(i, element) {
-			$.get('api/v1/results', {description: element.description, title: element.test_title}, function(results) {
+			var xhr = $.get('api/v1/results', element, function(results) {
 				var rows = [];
 				for (var j = 0; j < results.length; j++) {
 					rows.push([results[j].build, results[j].value]);
 				}
 
+				var title;
 				if (element.test_title.indexOf(element.description) !== -1) {
-					chartOptions.title = element.test_title;
+					title = element.test_title;
 				} else if (element.description.indexOf(element.test_title) !== -1) {
-					chartOptions.title = element.description;
+					title = element.description;
 				} else {
-					chartOptions.title = element.description + ", " + element.test_title;
+					title = element.description + ", " + element.test_title;
 				}
-
-				var div = document.createElement('div');
-				div.id = 'chart_div_' + i;
-				$('#charts').append(div);
 
 				var chartData = new google.visualization.DataTable();
 				chartData.addColumn('string');
 				chartData.addColumn('number');
 				chartData.addRows(rows);
 
-				var chart = new google.visualization.LineChart(document.getElementById(div.id));
-				chart.draw(chartData, chartOptions);
-			})
+				allCharts[i] = {title: title, data: chartData};
+			});
+
+			xhrs.push(xhr);
+		});
+
+		$.when.apply($, xhrs).done(function(){
+			$.each(allCharts, function(i, chart) {
+				chartOptions.title = chart.title;
+
+				var div = document.createElement('div');
+				div.id = 'chart_div_' + i;
+				$('#charts').append(div);
+
+				var lineChart = new google.visualization.LineChart(document.getElementById(div.id));
+				lineChart.draw(chart.data, chartOptions);
+			});
 		});
 	});
 }

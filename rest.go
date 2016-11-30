@@ -17,7 +17,7 @@ func getDescriptions(c *gin.Context) {
 
 func getResults(c *gin.Context) {
 	description := c.Query("description")
-	title := c.Query("title")
+	title := c.Query("test_title")
 
 	results, err := data.getResults(description, title)
 	if err != nil {
