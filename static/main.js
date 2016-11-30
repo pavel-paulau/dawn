@@ -81,19 +81,21 @@ function drawCharts() {
 			xhrs.push(xhr);
 		});
 
-		$.when.apply($, xhrs).done(function(){
+		$.when.apply($, xhrs).done(function() {
 			spinner.stop();
 			$("#spinner" ).remove();
 
 			$.each(allCharts, function(i, chart) {
-				chartOptions.title = chart.title;
+				setTimeout(function() {
+					chartOptions.title = chart.title;
 
-				var div = document.createElement('div');
-				div.id = 'chart_div_' + i;
-				$('#charts').append(div);
+					var div = document.createElement('div');
+					div.id = 'chart_div_' + i;
+					$('#charts').append(div);
 
-				var lineChart = new google.visualization.LineChart(document.getElementById(div.id));
-				lineChart.draw(chart.data, chartOptions);
+					var lineChart = new google.visualization.LineChart(document.getElementById(div.id));
+					lineChart.draw(chart.data, chartOptions);
+				});
 			});
 		});
 	});
